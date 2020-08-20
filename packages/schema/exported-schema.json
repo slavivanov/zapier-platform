@@ -592,7 +592,8 @@
         },
         "perform": {
           "description": "A function that processes the inbound webhook request.",
-          "$ref": "/FunctionSchema"
+          "$ref": "/FunctionSchema",
+          "tsType": "HookFunc"
         },
         "performList": {
           "description": "Can get \"live\" data on demand instead of waiting for a hook. If you find yourself reaching for this - consider resources and their built-in hook/list methods. Note: this is required for public apps to ensure the best UX for the end-user. For private apps, you can ignore warnings about this property with the `--without-style` flag during `zapier push`.",

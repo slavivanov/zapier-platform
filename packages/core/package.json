@@ -7,7 +7,7 @@
   "author": "Bryan Helmig <bryan@zapier.com>",
   "license": "UNLICENSED",
   "main": "index.js",
-  "typings": "index.d.ts",
+  "typings": "types/index.d.ts",
   "files": [
     "/include/",
     "/index.d.ts",
