@@ -1,6 +1,16 @@
 /* globals describe, expect, test */
 
-import { Bundle, createAppTester, tools } from 'zapier-platform-core';
+declare var describe: any;
+declare var test: any;
+declare var expect: any;
+
+import {
+  Bundle,
+  createAppTester,
+  tools,
+  PerformFunc,
+  TriggerOperationPerformFunc,
+} from 'zapier-platform-core';
 
 import App from '../index';
 
@@ -9,11 +19,13 @@ tools.env.inject();
 
 describe('movie', () => {
   test('list movies', async () => {
-    const bundle = { inputData: {} };
-    const results = (await appTester(
-      App.triggers.movie.operation.perform,
+    // TODO: this no longer catches bad inputData keys
+    const bundle = { inputData: { bad: true } };
+    const results = await appTester(
+      // TODO: this no longer catches wrong key for movie
+      App.triggers?.movie.operation.perform as TriggerOperationPerformFunc,
       bundle
-    )) as Array<object>;
+    );
 
     expect(results.length).toBeGreaterThan(0);
 

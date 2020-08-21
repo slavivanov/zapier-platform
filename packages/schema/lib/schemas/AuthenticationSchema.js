@@ -1,6 +1,7 @@
 'use strict';
 
 const makeSchema = require('../utils/makeSchema');
+const functionType = require('../utils/functionType');
 
 const AuthenticationBasicConfigSchema = require('./AuthenticationBasicConfigSchema.js');
 const AuthenticationCustomConfigSchema = require('./AuthenticationCustomConfigSchema.js');
@@ -50,6 +51,7 @@ module.exports = makeSchema(
         description:
           'A function or request that confirms the authentication is working.',
         oneOf: [{ $ref: RequestSchema.id }, { $ref: FunctionSchema.id }],
+        tsType: functionType(''),
       },
       fields: {
         description:

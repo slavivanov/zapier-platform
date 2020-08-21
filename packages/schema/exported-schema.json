@@ -3,6 +3,7 @@
   "schemas": {
     "AppSchema": {
       "id": "/AppSchema",
+      "title": "ZapierIntegration",
       "description": "Represents a full app.",
       "type": "object",
       "required": ["version", "platformVersion"],
@@ -33,11 +34,13 @@
         },
         "beforeRequest": {
           "description": "Before an HTTP request is sent via our `z.request()` client, you can modify it.",
-          "$ref": "/MiddlewaresSchema"
+          "$ref": "/MiddlewaresSchema",
+          "tsType": "Array<ZFunctions.BeforeRequestMiddlewareFunction | RequestObj | SerializableFunction>"
         },
         "afterResponse": {
           "description": "After an HTTP response is recieved via our `z.request()` client, you can modify it.",
-          "$ref": "/MiddlewaresSchema"
+          "$ref": "/MiddlewaresSchema",
+          "tsType": "Array<ZFunctions.AfterResponseMiddlewareFunction | RequestObj | SerializableFunction>"
         },
         "hydrators": {
           "description": "An optional bank of named functions that you can use in `z.hydrate('someName')` to lazily load data.",
@@ -261,6 +264,7 @@
     },
     "FunctionSchema": {
       "id": "/FunctionSchema",
+      "title": "SerializableFunction",
       "description": "Internal pointer to a function from the original source or the source code itself. Encodes arity and if `arguments` is used in the body. Note - just write normal functions and the system will encode the pointers for you. Or, provide {source: \"return 1 + 2\"} and the system will wrap in a function for you.",
       "oneOf": [
         { "type": "string", "pattern": "^\\$func\\$\\d+\\$[tf]\\$$" },
@@ -292,6 +296,7 @@
     },
     "RequestSchema": {
       "id": "/RequestSchema",
+      "title": "RequestObj",
       "description": "A representation of a HTTP request - you can use the `{{syntax}}` to inject authentication, field or global variables.",
       "type": "object",
       "properties": {
@@ -592,8 +597,7 @@
         },
         "perform": {
           "description": "A function that processes the inbound webhook request.",
-          "$ref": "/FunctionSchema",
-          "tsType": "HookFunc"
+          "$ref": "/FunctionSchema"
         },
         "performList": {
           "description": "Can get \"live\" data on demand instead of waiting for a hook. If you find yourself reaching for this - consider resources and their built-in hook/list methods. Note: this is required for public apps to ensure the best UX for the end-user. For private apps, you can ignore warnings about this property with the `--without-style` flag during `zapier push`.",
@@ -674,7 +678,11 @@
         },
         "perform": {
           "description": "How will Zapier get the data? This can be a function like `(z) => [{id: 123}]` or a request like `{url: 'http...'}`.",
-          "oneOf": [{ "$ref": "/RequestSchema" }, { "$ref": "/FunctionSchema" }]
+          "oneOf": [
+            { "$ref": "/RequestSchema" },
+            { "$ref": "/FunctionSchema" }
+          ],
+          "tsType": "ZFunctions.TriggerOperationPerformFunc | RequestObj | SerializableFunction"
         },
         "canPaginate": {
           "description": "Does this endpoint support a page offset?",
@@ -1049,7 +1057,11 @@
         },
         "test": {
           "description": "A function or request that confirms the authentication is working.",
-          "oneOf": [{ "$ref": "/RequestSchema" }, { "$ref": "/FunctionSchema" }]
+          "oneOf": [
+            { "$ref": "/RequestSchema" },
+            { "$ref": "/FunctionSchema" }
+          ],
+          "tsType": "ZFunctions. | RequestObj | SerializableFunction"
         },
         "fields": {
           "description": "Fields you can request from the user before they connect your app to Zapier.",

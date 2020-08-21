@@ -1,10 +1,16 @@
-import { Bundle, ZObject } from 'zapier-platform-core';
+import {
+  Bundle,
+  ZObject,
+  TriggerOperationPerformFunc,
+  AfterResponseMiddlewareFunction,
+} from 'zapier-platform-core';
 
-const perform = async (z: ZObject, bundle: Bundle) => {
+const perform: TriggerOperationPerformFunc = async (z, bundle) => {
   const response = await z.request(
     'https://auth-json-server.zapier-staging.com/movies'
   );
-  return response.data;
+  bundle.inputData.genre;
+  return response.data as Array<{ name: string; id: string }>;
 };
 
 export default {

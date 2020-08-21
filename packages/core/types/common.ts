@@ -1,23 +1,8 @@
-// Type definitions for zapier-platform-core
-// Project: Zapier's Platform Core
-// Definitions by: David Brownman <https://davidbrownman.com>
+// this is a .ts file instead of a .d.ts file so that not everything is exported
 
 /// <reference types="node" />
 
 import { Agent } from 'http';
-
-// The EXPORTED OBJECT
-export const version: string;
-export const tools: { env: { inject: (filename?: string) => void } };
-
-// see: https://github.com/zapier/zapier-platform-cli/issues/339#issue-336888249
-export const createAppTester: (
-  appRaw: object,
-  options?: { customStoreKey?: string }
-) => <T, B extends Bundle>(
-  func: (z: ZObject, bundle: B) => T | Promise<T>,
-  bundle?: Partial<B> // partial so we don't have to make a full bundle in tests
-) => Promise<T>; // appTester always returns a promise
 
 // internal only
 // export const integrationTestHandler: () => any;
@@ -32,9 +17,9 @@ type HttpMethod =
   | 'OPTIONS'
   | 'HEAD';
 
-export interface Bundle<InputData = { [x: string]: any }> {
+export interface Bundle<InputData = {}> {
   authData: { [x: string]: string };
-  inputData: InputData;
+  inputData: InputData extends undefined ? { [x: string]: unknown } : InputData;
   inputDataRaw: { [x: string]: string };
   meta: {
     isFillingDynamicDropdown: boolean;
@@ -105,6 +90,7 @@ interface BaseHttpResponse {
 export interface HttpResponse extends BaseHttpResponse {
   content: string;
   data?: object;
+  /** @deprecated use `response.data` instead. */
   json?: object;
 }
 
@@ -115,7 +101,7 @@ export interface RawHttpResponse extends BaseHttpResponse {
 }
 
 type DehydrateFunc = <T>(
-  func: (z: ZObject, bundle: Bundle<T>) => any,
+  func: (z: ZObject, bundle: Bundle<T>) => unknown,
   inputData: object
 ) => string;
 
@@ -162,7 +148,7 @@ export interface ZObject {
     /**
      * Acts a lot like regular `JSON.parse`, but throws a nice error for improper json input
      */
-    parse: (text: string) => any;
+    parse: (text: string) => ReturnType<JSON['parse']>;
     stringify: typeof JSON.stringify;
   };
 
@@ -187,5 +173,3 @@ export interface ZObject {
     RefreshAuthError: typeof RefreshAuthError;
   };
 }
-
-export * as Schemas from './schemas';

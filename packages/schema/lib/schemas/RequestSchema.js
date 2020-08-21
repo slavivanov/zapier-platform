@@ -8,6 +8,7 @@ const FunctionSchema = require('./FunctionSchema');
 module.exports = makeSchema(
   {
     id: '/RequestSchema',
+    title: 'RequestObj',
     description:
       'A representation of a HTTP request - you can use the `{{syntax}}` to inject authentication, field or global variables.',
     type: 'object',

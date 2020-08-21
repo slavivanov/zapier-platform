@@ -1,6 +1,7 @@
 'use strict';
 
 const makeSchema = require('../utils/makeSchema');
+const functionType = require('../utils/functionType');
 
 const BasicOperationSchema = require('./BasicOperationSchema');
 
@@ -24,7 +25,10 @@ BasicPollingOperationSchema.properties = {
     enum: ['polling'], // notification?
   },
   resource: BasicPollingOperationSchema.properties.resource,
-  perform: BasicPollingOperationSchema.properties.perform,
+  perform: {
+    ...BasicPollingOperationSchema.properties.perform,
+    tsType: functionType('TriggerOperationPerformFunc'),
+  },
   canPaginate: {
     description: 'Does this endpoint support a page offset?',
     type: 'boolean',

@@ -8,6 +8,8 @@ const FunctionSourceSchema = require('./FunctionSourceSchema');
 module.exports = makeSchema(
   {
     id: '/FunctionSchema',
+    // types-only title to show that this isn't really function, it's a JSON object that points to a function
+    title: 'SerializableFunction',
     description:
       'Internal pointer to a function from the original source or the source code itself. Encodes arity and if `arguments` is used in the body. Note - just write normal functions and the system will encode the pointers for you. Or, provide {source: "return 1 + 2"} and the system will wrap in a function for you.',
     examples: [

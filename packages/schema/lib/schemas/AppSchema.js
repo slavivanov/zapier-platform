@@ -15,9 +15,12 @@ const MiddlewaresSchema = require('./MiddlewaresSchema');
 const HydratorsSchema = require('./HydratorsSchema');
 const AppFlagsSchema = require('./AppFlagsSchema');
 
+const functionType = require('../utils/functionType');
+
 module.exports = makeSchema(
   {
     id: '/AppSchema',
+    title: 'ZapierIntegration',
     description: 'Represents a full app.',
     type: 'object',
     required: ['version', 'platformVersion'],
@@ -54,11 +57,13 @@ module.exports = makeSchema(
         description:
           'Before an HTTP request is sent via our `z.request()` client, you can modify it.',
         $ref: MiddlewaresSchema.id,
+        tsType: `Array<${functionType('BeforeRequestMiddlewareFunction')}>`,
       },
       afterResponse: {
         description:
           'After an HTTP response is recieved via our `z.request()` client, you can modify it.',
         $ref: MiddlewaresSchema.id,
+        tsType: `Array<${functionType('AfterResponseMiddlewareFunction')}>`,
       },
       hydrators: {
         description:

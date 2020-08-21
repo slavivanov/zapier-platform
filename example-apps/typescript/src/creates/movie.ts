@@ -1,4 +1,4 @@
-import { Bundle, ZObject } from 'zapier-platform-core';
+import { Bundle, ZObject, Create } from 'zapier-platform-core';
 
 // You can optionally add add the shape of the inputData in bundle, which will pass that
 // info down into the function and tests
@@ -14,10 +14,10 @@ const perform = async (
       year: bundle.inputData.year,
     },
   });
-  return response.data;
+  return response.data as object;
 };
 
-export default {
+const movieCreate: Create = {
   key: 'movie',
   noun: 'Movie',
 
@@ -38,3 +38,5 @@ export default {
     },
   },
 };
+
+export default movieCreate;

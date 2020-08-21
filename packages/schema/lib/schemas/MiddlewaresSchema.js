@@ -12,7 +12,9 @@ module.exports = makeSchema({
       type: 'array',
       items: { $ref: FunctionSchema.id },
     },
-    { $ref: FunctionSchema.id },
+    {
+      $ref: FunctionSchema.id,
+    },
   ],
   additionalProperties: false,
 });
