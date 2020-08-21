@@ -20,6 +20,7 @@ const { version } = require('../package.json');
 const addApiKeyHeader: BeforeRequestMiddlewareFunction = (req, z, bundle) => {
   // Hard-coded api key just to demo. DON'T do auth like this for your production app!
   req.headers = req.headers || {};
+  z.dehydrate((z, bundle) => bundle.inputData.cool, { cool: 'yes' });
   req.headers['X-Api-Key'] = 'secret';
   return req;
 };

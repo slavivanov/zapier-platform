@@ -6,7 +6,7 @@ export * from './common';
 export * from './schemas';
 export * from './functionSignatures';
 
-import { ZObject, Bundle } from './common';
+import { ZObject, Bundle, DefaultInputData } from './common';
 import { PerformFunc } from './functionSignatures';
 import { SerializableFunction, RequestObj, ZapierIntegration } from './schemas';
 
@@ -22,8 +22,10 @@ export const createAppTester: (
   appRaw: ZapierIntegration,
   options?: { customStoreKey?: string }
   // TODO: widen this
-) => <T = PerformFunc | SerializableFunction | RequestObj>(
+) => <T extends PerformFunc | RequestObj | SerializableFunction>(
   func: T,
-  bundle?: Partial<Bundle> // partial so we don't have to make a full bundle in tests
+  // a partial version of the bundle we're passing in
+  // partial so we don't have to make a full bundle in tests
+  bundle?: Partial<Parameters<PerformFunc>[1]>
   // TODO: update this to match the fact that we got a return type
 ) => Promise<T extends PerformFunc ? ReturnType<T> : object | object[]>; // appTester always returns a promise

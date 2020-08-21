@@ -17,10 +17,16 @@ type HttpMethod =
   | 'OPTIONS'
   | 'HEAD';
 
-export interface Bundle<InputData = {}> {
+// reused all over, let's keep the definition in one place
+export type DefaultInputData = { [k: string]: unknown };
+
+// defer the default inputData shape to the property itself
+export interface Bundle<
+  InputData extends DefaultInputData | undefined = undefined
+> {
   authData: { [x: string]: string };
-  inputData: InputData extends undefined ? { [x: string]: unknown } : InputData;
-  inputDataRaw: { [x: string]: string };
+  inputData: InputData extends undefined ? DefaultInputData : InputData;
+  inputDataRaw: { [P in keyof InputData]: string };
   meta: {
     isFillingDynamicDropdown: boolean;
     isLoadingSample: boolean;
@@ -89,9 +95,9 @@ interface BaseHttpResponse {
 
 export interface HttpResponse extends BaseHttpResponse {
   content: string;
-  data?: object;
+  data?: object | unknown[];
   /** @deprecated use `response.data` instead. */
-  json?: object;
+  json?: HttpResponse['data'];
 }
 
 export interface RawHttpResponse extends BaseHttpResponse {
@@ -100,9 +106,9 @@ export interface RawHttpResponse extends BaseHttpResponse {
   body: NodeJS.ReadableStream;
 }
 
-type DehydrateFunc = <T>(
-  func: (z: ZObject, bundle: Bundle<T>) => unknown,
-  inputData: object
+type DehydrateFunc = <InputData extends DefaultInputData>(
+  func: (z: ZObject, bundle: Bundle<InputData>) => unknown,
+  inputData: InputData
 ) => string;
 
 export interface ZObject {

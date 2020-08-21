@@ -1,6 +1,7 @@
 'use strict';
 
 const makeSchema = require('../utils/makeSchema');
+const functionType = require('../utils/functionType');
 
 const BasicActionOperationSchema = require('./BasicActionOperationSchema');
 
@@ -19,6 +20,8 @@ BasicCreateActionOperationSchema.properties.shouldLock = {
     'Should this action be performed one at a time (avoid concurrency)?',
   type: 'boolean',
 };
+
+BasicActionOperationSchema.tsType = functionType('CreateOperationPerformFunc');
 
 module.exports = makeSchema(
   BasicCreateActionOperationSchema,

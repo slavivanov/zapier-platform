@@ -7,16 +7,18 @@ import {
   HttpResponse,
   RawHttpResponse,
   HttpRequestOptions,
+  DefaultInputData,
 } from './common';
 
 // import { RequestObj, SerializableFunction } from './schemas';
 
 // HELPERS //
 type MaybePromise<T> = T | Promise<T>;
-type OperationFunc<T> = (
+type OperationFunc<T, InputData extends DefaultInputData | undefined> = (
   z: ZObject,
-  bundle: Bundle<{ genre: string }>
+  bundle: Bundle<InputData>
 ) => MaybePromise<T>;
+export type GenericPerformFunction = OperationFunc<unknown, undefined>;
 
 // weird corner case to disallow serialized strings
 export type NoStrings<T> = Exclude<T, string>;
@@ -26,13 +28,24 @@ type ArrayOfObjectsWithId = Array<{
   id: string | number;
   [k: string]: unknown;
 }>;
-export type TriggerOperationPerformFunc = OperationFunc<ArrayOfObjectsWithId>;
-export type SearchOperationPerformFunc<B> = OperationFunc<Array<object>, B>;
-export type CreateOperationPerformFunc<B> = OperationFunc<object, B>;
-export type GenericFunction<B> = OperationFunc<unknown, B>;
-export type PerformFunc = TriggerOperationPerformFunc;
-// | SearchOperationPerformFunc
-// | CreateOperationPerformFunc;
+
+export type TriggerOperationPerformFunc<
+  InputData extends DefaultInputData | undefined = undefined
+> = OperationFunc<ArrayOfObjectsWithId, InputData>;
+
+export type SearchOperationPerformFunc<
+  InputData extends DefaultInputData | undefined = undefined
+> = OperationFunc<Array<object>, InputData>;
+
+export type CreateOperationPerformFunc<
+  InputData extends DefaultInputData | undefined = undefined
+> = OperationFunc<object, InputData>;
+
+export type PerformFunc =
+  // need ANY here?
+  | TriggerOperationPerformFunc
+  | SearchOperationPerformFunc
+  | CreateOperationPerformFunc;
 
 // MIDDLEWARE //
 

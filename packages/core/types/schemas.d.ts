@@ -1,4 +1,5 @@
 import * as ZFunctions from './functionSignatures';
+import { DefaultInputData } from './common';
 
 /* tslint:disable */
 /* eslint-disable */
@@ -651,7 +652,7 @@ export interface BasicPollingOperation {
    * How will Zapier get the data? This can be a function like `(z) => [{id: 123}]` or a request like `{url: 'http...'}`.
    */
   perform:
-    | ZFunctions.TriggerOperationPerformFunc
+    | ZFunctions.TriggerOperationPerformFunc<any>
     | RequestObj
     | SerializableFunction;
   /**
