@@ -22,10 +22,10 @@ export const createAppTester: (
   appRaw: ZapierIntegration,
   options?: { customStoreKey?: string }
   // TODO: widen this
-) => <T extends PerformFunc | RequestObj | SerializableFunction>(
+) => <B extends DefaultInputData, T extends PerformFunc<B>>(
   func: T,
   // a partial version of the bundle we're passing in
   // partial so we don't have to make a full bundle in tests
-  bundle?: Partial<Parameters<PerformFunc>[1]>
+  bundle?: Partial<Parameters<T>[1]>
   // TODO: update this to match the fact that we got a return type
-) => Promise<T extends PerformFunc ? ReturnType<T> : object | object[]>; // appTester always returns a promise
+) => Promise<T extends PerformFunc<B> ? ReturnType<T> : object | object[]>; // appTester always returns a promise

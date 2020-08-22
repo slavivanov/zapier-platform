@@ -14,11 +14,11 @@ import {
 
 // HELPERS //
 type MaybePromise<T> = T | Promise<T>;
-type OperationFunc<T, InputData extends DefaultInputData | undefined> = (
+type OperationFunc<T, InputData extends DefaultInputData> = (
   z: ZObject,
   bundle: Bundle<InputData>
 ) => MaybePromise<T>;
-export type GenericPerformFunction = OperationFunc<unknown, undefined>;
+export type GenericPerformFunction = OperationFunc<unknown, DefaultInputData>;
 
 // weird corner case to disallow serialized strings
 export type NoStrings<T> = Exclude<T, string>;
@@ -30,7 +30,7 @@ type ArrayOfObjectsWithId = Array<{
 }>;
 
 export type TriggerOperationPerformFunc<
-  InputData extends DefaultInputData | undefined = undefined
+  InputData extends DefaultInputData = DefaultInputData
 > = OperationFunc<ArrayOfObjectsWithId, InputData>;
 
 export type SearchOperationPerformFunc<
@@ -41,11 +41,11 @@ export type CreateOperationPerformFunc<
   InputData extends DefaultInputData | undefined = undefined
 > = OperationFunc<object, InputData>;
 
-export type PerformFunc =
+export type PerformFunc<T extends DefaultInputData> =
   // need ANY here?
-  | TriggerOperationPerformFunc
-  | SearchOperationPerformFunc
-  | CreateOperationPerformFunc;
+  TriggerOperationPerformFunc<T>;
+// | SearchOperationPerformFunc
+// | CreateOperationPerformFunc;
 
 // MIDDLEWARE //
 

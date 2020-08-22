@@ -9,27 +9,29 @@ import {
   tools,
   TriggerOperationPerformFunc,
   ZapierIntegration,
+  Bundle,
 } from 'zapier-platform-core';
 
 import App from '../index';
-import trigger from '../triggers/movie';
+import trigger, { perform } from '../triggers/movie';
 
 const appTester = createAppTester(App);
 tools.env.inject();
+
+type T = typeof trigger.operation.perform;
 
 describe('movie', () => {
   test('list movies', async () => {
     // TODO: this no longer catches bad inputData keys
     const bundle = {
       inputData: { bad: true },
+      // @ts-expect-error
       whack: true,
     };
     const results = (await appTester(
       // TODO: this no longer catches wrong key for movie
-      // App.triggers?.movie.operation.perform as TriggerOperationPerformFunc,
-      trigger.operation.perform as TriggerOperationPerformFunc<{
-        cool: string;
-      }>,
+
+      perform,
       // {
       //   inputData: { bad: true },
       //   whack: true,

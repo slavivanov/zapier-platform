@@ -1,7 +1,7 @@
 import { TriggerOperationPerformFunc, Trigger } from 'zapier-platform-core';
 
 // empty object denotes that there's no inputData
-const perform: TriggerOperationPerformFunc<{ cool: string }> = async (
+export const perform: TriggerOperationPerformFunc<{ cool: string }> = async (
   z,
   bundle
 ) => {

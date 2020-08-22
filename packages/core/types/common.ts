@@ -21,11 +21,9 @@ type HttpMethod =
 export type DefaultInputData = { [k: string]: unknown };
 
 // defer the default inputData shape to the property itself
-export interface Bundle<
-  InputData extends DefaultInputData | undefined = undefined
-> {
+export interface Bundle<InputData extends DefaultInputData = DefaultInputData> {
   authData: { [x: string]: string };
-  inputData: InputData extends undefined ? DefaultInputData : InputData;
+  inputData: InputData;
   inputDataRaw: { [P in keyof InputData]: string };
   meta: {
     isFillingDynamicDropdown: boolean;
